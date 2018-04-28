@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "handelsblatt",
+      "invocationName": "handelsblatt demo",
       "intents": [
         {
           "name": "ReadPodcastIntent",
