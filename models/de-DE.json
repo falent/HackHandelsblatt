@@ -43,7 +43,8 @@
             "Neues über {news_topic}",
             "Neues von {news_topic}",
             "Sag mir Nachrichten von {news_topic}",
-            "über {news_topic}"
+            "über {news_topic}",
+            "Alles über {news_topic}"
           ]
         },
         {

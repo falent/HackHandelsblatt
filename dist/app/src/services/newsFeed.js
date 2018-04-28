@@ -17,8 +17,9 @@ exports.getNewsOfLast24h = topic => {
   return newsapi.v2
     .everything({
       q: topic.toString(),
-      sources: "handelsblatt",
-      domains: "handelsblatt.com",
+      sources: "handelsblatt, bild, die-zeit, focus, spiegel-online",
+      domains:
+        "handelsblatt.com, bild.de, bunte.de, zeit.de, focus.de, spiegel.de",
       from,
       to,
       language: "de",
