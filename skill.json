@@ -4,16 +4,16 @@
       "locales": {
         "en-US": {
           "summary": "Hackathon",
-          "examplePhrases": ["Alexa, open handelsblatt"],
+          "examplePhrases": ["Alexa, open blognews"],
           "keywords": ["hello", "world"],
-          "name": "handelsblatt",
+          "name": "blognews",
           "description": "Hackathon Skill"
         },
         "de-DE": {
           "summary": "Hackathon",
-          "examplePhrases": ["Alexa, starte handelsblatt"],
+          "examplePhrases": ["Alexa, starte blognews"],
           "keywords": ["hello", "world"],
-          "name": "handelsblatt",
+          "name": "blognews",
           "description": "Hackathon Skill"
         }
       },
@@ -25,7 +25,7 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "https://374c4676.ngrok.io",
+          "uri": "https://aea87571.ngrok.io",
           "sslCertificateType": "Wildcard"
         },
         "interfaces": [
