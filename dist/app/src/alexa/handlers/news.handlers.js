@@ -2,47 +2,75 @@ const Alexa = require("alexa-sdk");
 const States = require("./states.const");
 const SpeechOutputUtils = require("../utils/speech-output.utils");
 var https = require("https");
-
+var _ = require("lodash");
 const newsService = require("../../services/newsFeed");
 
 let NEWS = [];
 
 module.exports = Alexa.CreateStateHandler(States.NEWS, {
-  NewsIntent: function(event, context, callback) {
+  NewsIntent: function(event) {
     var topic = this.event.request.intent.slots.news_topic.value;
     console.log("ttttopicc : " + topic);
 
     self = this;
-    return newsService
-      .getNewsOfLast24h(topic)
-      .then(results => {
-        console.log(JSON.stringify(results));
-        let currentNews = results.slice(0, 3);
-        NEWS = results.slice(3);
-        if (currentNews && currentNews.length > 1) {
-          let message = `Ich habe ${results.length} Ergebnisse gefunden. `;
-          currentNews = currentNews.map(entry =>
-            entry.replace(/.*reports: /, "")
-          );
-          message += currentNews
-            .map((entry, idx) => `Punkt ${idx + 1}: ${entry}`)
-            .join(" ");
-          if (NEWS && NEWS.length > 1) {
-            message += ` Habe noch ${NEWS.length} weitere Nachricht${
-              NEWS.length === 1 ? "." : "en."
-            }`;
-            message += " Willst Du noch mehr?";
-          }
-          self.response.speak(message);
+    return newsService.getNewsOfLast24h(topic).then(results => {
+      console.log(JSON.stringify(results));
+      NEWS = results
+        .map(entry => entry.replace(/.*reports: /, ""))
+        .map((entry, idx) => `Punkt ${idx + 1}: ${entry}`);
+
+      let currentNews = _.take(NEWS, 3);
+      NEWS = _.drop(NEWS, 3);
+      if (currentNews && currentNews.length > 1) {
+        let message = `Ich habe ${results.length} Ergebnisse gefunden. `;
+        message += currentNews.join(" ");
+
+        if (NEWS && NEWS.length > 1) {
+          message += ` Habe noch ${NEWS.length} weitere Nachricht${
+            NEWS.length === 1 ? "." : "en."
+          }`;
+          message += " Willst Du noch mehr?";
         } else {
-          self.response.speak(
-            `Habe keine Neuigkeiten über ${topic} gefunden in den letzten 24 Stunden.`
-          );
+          message += " Mehr hab ich nicht. Ciaoi.";
         }
-        console.log("resesponsee : " + JSON.stringify(results.join(" ")));
-        self.emit(":responseReady");
-      })
-      .then(callback);
+        self.response.speak(message).listen(message);
+      } else {
+        self.response.speak(
+          `Habe keine Neuigkeiten über ${topic} gefunden in den letzten 24 Stunden.`
+        );
+      }
+      console.log("resesponsee : " + JSON.stringify(results.join(" ")));
+      self.emit(":responseReady");
+    });
+  },
+
+  "AMAZON.YesIntent": function() {
+    console.log("AMAZON.YesIntent: " + JSON.stringify(NEWS));
+    self = this;
+    if (NEWS && NEWS.length > 1) {
+      let currentNews = _.take(NEWS, 3);
+      NEWS = _.drop(NEWS, 3);
+      let message = currentNews.join(" ");
+      if (NEWS && NEWS.length > 1) {
+        message += ` Habe noch ${NEWS.length} weitere Nachricht${
+          NEWS.length === 1 ? "" : "en"
+        } für Dich.`;
+        message += " Willst Du noch mehr?";
+      } else {
+        message += " Das war alles. Tschüssi";
+      }
+      self.response.speak(message).listen(message);
+      self.emit(":responseReady");
+    } else {
+      self.response.speak(`Habe nix mehr für Dich.`);
+      self.emit(":responseReady");
+    }
+  },
+
+  "AMAZON.NoIntent": function() {
+    this.handler.state = States.NONE;
+    console.log("AMAZON.NoIntent");
+    this.emit(":tell", "Alles klar. Tschüssi");
   },
 
   // Unhandled Intent:
@@ -57,11 +85,6 @@ module.exports = Alexa.CreateStateHandler(States.NEWS, {
   "AMAZON.HelpIntent": function() {
     this.handler.state = States.NONE;
     this.emit(":ask", SpeechOutputUtils.pickRandom(this.t("HELP")));
-  },
-
-  "AMAZON.NoIntent": function() {
-    this.handler.state = States.NONE;
-    this.emit("AMAZON.CancelIntent");
   },
 
   "AMAZON.StopIntent": function() {

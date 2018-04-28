@@ -94,6 +94,11 @@ module.exports = {
     this.emit(":responseReady");
   },
 
+  "AMAZON.NoIntent": function() {
+    console.log("AMAZON.NoIntent");
+    this.emit(":tell", "Alles klar. Tschüssi");
+  },
+
   "AMAZON.CancelIntent": function() {
     this.response.speak(speechOutputUtils.pickRandom(this.t("CANCEL_ANSWER")));
     this.emit(":responseReady");
