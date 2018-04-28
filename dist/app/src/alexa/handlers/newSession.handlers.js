@@ -7,7 +7,6 @@ const States = require("./states.const");
 const inNewSessionStartableIntents = ["GetWeightIntent"];
 
 const duringAudioAllowedIntents = [
-  "ReadPodcasts",
   "AMAZON.PauseIntent",
   "AMAZON.NextIntent",
   "AMAZON.PreviousIntent",
@@ -22,34 +21,33 @@ const duringAudioAllowedIntents = [
 
 module.exports = {
   NewSession: function() {
-    console.log("Oto nowa sesja");
-    console.log(this.event.session.sessionId);
-    // Intent Request:
-    if (this.event.request.type === "IntentRequest") {
-      const intentName = this.event.request.intent.name;
+    
+      console.log("Oto nowa sesja");
+      console.log(this.event.session.sessionId);
+      // Intent Request:
+      if (this.event.request.type === 'IntentRequest') {
+          const intentName = this.event.request.intent.name;
 
-      // Podcast/Audio is playing:
-      if (
-        (this.event.context.AudioPlayer &&
-          this.event.context.AudioPlayer.offsetInMilliseconds > 0) ||
-        (this.event.attributes && this.event.attributes.STATE === States.MUSIC)
-      ) {
-        if (duringAudioAllowedIntents.indexOf(intentName) > -1) {
-          this.handler.state = States.MUSIC;
-          return this.emitWithState(intentName);
-        } else {
-          this.handler.state = States.MUSIC;
-          return this.emitWithState("Unhandled");
-        }
-      }
+          // Podcast/Audio is playing:
+          if ((this.event.context.AudioPlayer && this.event.context.AudioPlayer.offsetInMilliseconds > 0) ||
+              (this.event.attributes && this.event.attributes.STATE === States.PODCAST)) {
 
-      // Intent can be started directly in new session:
-      if (inNewSessionStartableIntents.indexOf(intentName) > -1) {
-        return this.emit(intentName);
+              if (duringAudioAllowedIntents.indexOf(intentName) > -1) {
+                  this.handler.state = States.PODCAST;
+                  return this.emitWithState(intentName);
+              } else {
+                  this.handler.state = States.PODCAST;
+                  return this.emitWithState('Unhandled');
+              }
+          }
+
+          // Intent can be started directly in new session:
+          if (inNewSessionStartableIntents.indexOf(intentName) > -1) {
+              return this.emit(intentName);
+          }
       }
-    }
-    // else: Launch Request
-    this.emit("LaunchIntent");
+      // else: Launch Request
+      this.emit('LaunchIntent');
   },
 
   LaunchIntent: function() {
@@ -82,6 +80,13 @@ module.exports = {
   // Unhandled Intent:
   // Built-In Intents:
 
+    Unhandled: function() {
+        this.response
+            .speak(speechOutputUtils.pickRandom(this.t("UNDEFINED")))
+            .listen(this.t("REPEAT"));
+        this.emit(":responseReady");
+    },
+
   "AMAZON.HelpIntent": function() {
     this.response.speak(
       speechOutputUtils.pickRandom(this.t("HELP")).listen(this.t("REPEAT"))
@@ -103,17 +108,10 @@ module.exports = {
     this.response.speak(speechOutputUtils.pickRandom(this.t("CANCEL_ANSWER")));
     this.emit(":responseReady");
   },
-  Unhandled: function() {
-    this.response
-      .speak(speechOutputUtils.pickRandom(this.t("UNDEFINED")))
-      .listen(this.t("REPEAT"));
-    this.emit(":responseReady");
-  }
-  ,
 
   'ReadPodcastIntent': function() {
   this.handler.state = States.PODCAST;
   console.log("Read podcasts!");
   this.emitWithState('ReadPodcastIntent');
-}
+  }
 };

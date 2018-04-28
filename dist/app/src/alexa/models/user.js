@@ -1,5 +1,5 @@
 
-require('dotenv').config()
+require('dotenv').config();
 
 var mongoose = require('mongoose');
 //you can decide if you are using heroku or local
