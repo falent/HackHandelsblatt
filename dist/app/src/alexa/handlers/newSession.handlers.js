@@ -10,7 +10,6 @@ const inNewSessionStartableIntents = [
 
 
 const duringAudioAllowedIntents = [
-    'ReadPodcasts',
     'AMAZON.PauseIntent',
     'AMAZON.NextIntent',
     'AMAZON.PreviousIntent',
@@ -31,6 +30,9 @@ module.exports = {
 
     'NewSession': function() {
 
+
+
+
         console.log("Oto nowa sesja");
         console.log(this.event.session.sessionId);
         // Intent Request:
@@ -39,13 +41,13 @@ module.exports = {
 
             // Podcast/Audio is playing:
             if ((this.event.context.AudioPlayer && this.event.context.AudioPlayer.offsetInMilliseconds > 0) ||
-                (this.event.attributes && this.event.attributes.STATE === States.MUSIC)) {
+                (this.event.attributes && this.event.attributes.STATE === States.PODCAST)) {
 
                 if (duringAudioAllowedIntents.indexOf(intentName) > -1) {
-                    this.handler.state = States.MUSIC;
+                    this.handler.state = States.PODCAST;
                     return this.emitWithState(intentName);
                 } else {
-                    this.handler.state = States.MUSIC;
+                    this.handler.state = States.PODCAST;
                     return this.emitWithState('Unhandled');
                 }
             }
@@ -64,18 +66,9 @@ module.exports = {
 
 
 
-
-        //We are checking a name of our user
-
-
-       var reprompt = 'Welche Nachrichten möchtest du hören?';
-       var speechOutput = "Welche Nachrichten möchtest du hören?"
-
-
-
-
-       this.emit(':ask',speechOutput, reprompt);
-
+        this.handler.state = States.PODCAST;
+        console.log("Read podcasts!");
+        this.emitWithState('ReadPodcastIntent');
 
 
 
@@ -85,22 +78,14 @@ module.exports = {
 
     // Custom Intents:
 
-    'NameIntent': function() {
-        console.log('[NewSessionHandlers] Template');
-        this.handler.state = States.NAME;
-        this.emitWithState('NameIntent');
+
+
+    'ReadPodcastIntent': function() {
+        this.handler.state = States.PODCAST;
+        console.log("Read podcasts!");
+        this.emitWithState('ReadPodcastIntent');
     },
 
-    'NewsIntent': function() {
-        console.log('[NewsIntent] Template');
-        this.handler.state = States.NEWS;
-        this.emitWithState('NewsIntent');
-    },
-
-    'PlayMusic': function() {
-        this.handler.state = States.MUSIC;
-        this.emitWithState('PlayMusic');
-    },
     // Unhandled Intent:
     // Built-In Intents:
 

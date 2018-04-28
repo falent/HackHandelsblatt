@@ -1,7 +1,7 @@
 // podcast.handlers
 
 const Alexa = require('alexa-sdk');
-const StatesConst = require('./states.const');
+const States = require('./states.const');
 const striptags = require('striptags');
 
 var podcastData = require('../controllers/feed.controller');
@@ -14,43 +14,47 @@ var LastReadPodcast = numberOfPodcasts;
 /**
  * All Intent Handlers for state : PODCAST
  */
-module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
+module.exports = Alexa.CreateStateHandler(States.PODCAST, {
 
-    'ReadPodcasts' : function () {
+    'ReadPodcastIntent' : function () {
+
+        console.log("Im in Podcast!")
 
         for (i = 0; i < podcastData.length; i++) {
             var onlyTitles= podcastData[i]['title'].replace(/\[(.*?)\]/g, '');
             audioTitles.push(" <break time='0.2s'/>"+(i+1)+"<break time='0.2s'/> "+onlyTitles+" ");
         }
 
-        this.emit(':askWithCard', this.t('CHOOSE_PODCAST', audioTitles.slice(0, numberOfPodcasts).toString()), this.t('CHOOSE_PODCAST', audioTitles.slice(0, numberOfPodcasts).toString()), this.t('PODCAST_CARD', ""), striptags(this.t('CHOOSE_PODCAST', audioTitles.slice(0, numberOfPodcasts).toString())));
-	},
-	
-	'ReadMorePodcasts' : function () {
-		LastReadPodcast=LastReadPodcast+3;
-		var start =LastReadPodcast-3;
-		let choosenSpeachOutput = 'CHOOSE_PODCAST_MORE';
-		if (LastReadPodcast>=audioTitles.length){
-			var leatest = audioTitles.length % numberOfPodcasts;
-			start = audioTitles.length-leatest;
-			LastReadPodcast=audioTitles.length;
-			choosenSpeachOutput = 'CHOOSE_PODCAST_NOMORE';
-		}
+
+        this.emit(':ask', "HHAHHAa " + audioTitles.slice(0, numberOfPodcasts).toString());
+        //this.emit(':ask', "hey "+audioTitles);
+    },
+
+    'ReadMorePodcasts' : function () {
+        LastReadPodcast=LastReadPodcast+3;
+        var start =LastReadPodcast-3;
+        let choosenSpeachOutput = 'CHOOSE_PODCAST_MORE';
+        if (LastReadPodcast>=audioTitles.length){
+            var leatest = audioTitles.length % numberOfPodcasts;
+            start = audioTitles.length-leatest;
+            LastReadPodcast=audioTitles.length;
+            choosenSpeachOutput = 'CHOOSE_PODCAST_NOMORE';
+        }
 
 
-	    console.log(choosenSpeachOutput);
-        this.emit(':askWithCard', 
-        		this.t(choosenSpeachOutput, audioTitles.slice(start, LastReadPodcast).toString()),
-        		this.t(choosenSpeachOutput, audioTitles.slice(start, LastReadPodcast).toString()),
-        		this.t('PODCAST_CARD', ""),
-        		striptags(this.t(choosenSpeachOutput, audioTitles.slice(start, LastReadPodcast).toString()))
-        		);
+        console.log(choosenSpeachOutput);
+        this.emit(':askWithCard',
+            this.t(choosenSpeachOutput, audioTitles.slice(start, LastReadPodcast).toString()),
+            this.t(choosenSpeachOutput, audioTitles.slice(start, LastReadPodcast).toString()),
+            this.t('PODCAST_CARD', ""),
+            striptags(this.t(choosenSpeachOutput, audioTitles.slice(start, LastReadPodcast).toString()))
+        );
 
-	},
+    },
 
     'LastPodcastIntent' : function () {
         const numberSlot = {
-            value: 1    
+            value: 1
         };
         if (!this.event.request.intent.slots) {
             this.event.request.intent['slots'] = {};
@@ -60,10 +64,8 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
     },
 
     'NumberIntent': function () {
-        const number = this.event.request.intent.slots.num.value;
-        if (isNaN(number)) {
-            number = 1;
-        }
+        const number = 1;
+        console.log("Im here")
         this.attributes['LastBlogNumber'] = number-1;
 
         if (!this.attributes['playOrder']) {
@@ -74,7 +76,7 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
             this.attributes['loop'] = true;
             this.attributes['shuffle'] = false;
             this.attributes['playbackIndexChanged'] = true;
-            this.handler.state = StatesConst.PODCAST;
+            this.handler.state = States.PODCAST;
         }
 
         this.attributes['index'] = number - 1;
@@ -85,7 +87,7 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
     'NumberIntentFromBlog': function () {
         var number = this.attributes['blogNumber'];
         this.attributes['LastBlogNumber'] = number-1;
-		console.log(this.attributes['blogNumber']);
+        console.log(this.attributes['blogNumber']);
         if (isNaN(number)) {
             number = 1;
         }
@@ -98,7 +100,7 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
             this.attributes['loop'] = true;
             this.attributes['shuffle'] = false;
             this.attributes['playbackIndexChanged'] = true;
-            this.handler.state = StatesConst.PODCAST;
+            this.handler.state = States.PODCAST;
         }
 
         this.attributes['index'] = number - 1;
@@ -117,7 +119,7 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
             this.attributes['loop'] = true;
             this.attributes['shuffle'] = false;
             this.attributes['playbackIndexChanged'] = true;
-            this.handler.state = StatesConst.PODCAST;
+            this.handler.state = States.PODCAST;
         }
         controller.play.call(this);
     },
@@ -133,7 +135,7 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
     'SessionEndedRequest' : function () {
         this.emitWithState('AMAZON.CancelIntent');
     },
-    
+
     // Built-In Intents:
 
     'AMAZON.HelpIntent' : function () {
@@ -151,7 +153,7 @@ module.exports = Alexa.CreateStateHandler(StatesConst.PODCAST, {
     },
     'AMAZON.CancelIntent' : function () {
         this.attributes['offsetInMilliseconds'] = 0;
-        this.handler.state = StatesConst.NONE;
+        this.handler.state = States.NONE;
 
         const message = this.t('STOP_ANSWER');
         this.response.speak(message).audioPlayerStop();
@@ -169,7 +171,7 @@ var controller = function () {
              *      Resuming audio when stopped/paused.
              *      Next/Previous commands issued.
              */
-            this.handler.state = StatesConst.PODCAST;
+            this.handler.state = States.PODCAST;
 
             if (this.attributes['playbackFinished']) {
                 // Reset to top of the playlist when reached end.
@@ -201,105 +203,105 @@ var controller = function () {
              *  Attributes already stored when AudioPlayer.Stopped request received.
              */
 
-             var message = 'Danke';
-             this.response.speak(message).audioPlayerStop();
-             return this.emit(':responseReady');
+            var message = 'Danke';
+            this.response.speak(message).audioPlayerStop();
+            return this.emit(':responseReady');
         },
         playNext: function () {
-/*          
- * This code makes sense only if we can save UserID into DynamoDB. Of course we should get podcast index from DynamoDB
- * I leave it as a comment because maybe in the future they want to save userID and we can improve this feature very
- * fast and easily :)
- * 
- * 			var index = this.attributes['LastBlogNumber'];
-            index += 1;
-            this.attributes['LastBlogNumber']=index;
-            // Check for last audio file.
-            var end = index+1;
-            console.log(end);
-            if (end >= podcastData.length) {
+            /*
+             * This code makes sense only if we can save UserID into DynamoDB. Of course we should get podcast index from DynamoDB
+             * I leave it as a comment because maybe in the future they want to save userID and we can improve this feature very
+             * fast and easily :)
+             *
+             * 			var index = this.attributes['LastBlogNumber'];
+                        index += 1;
+                        this.attributes['LastBlogNumber']=index;
+                        // Check for last audio file.
+                        var end = index+1;
+                        console.log(end);
+                        if (end >= podcastData.length) {
 
-                    // Reached at the end. Thus reset state to start mode and stop playing.
-                    this.handler.state = StatesConst.PODCAST;
-                    const message = this.t('PODCAST_END_PLAYLIST', (podcastData.length-1));
-                    this.response.speak(message).audioPlayerStop();
-                    return this.emit(':responseReady');
-                
-            }
-            // Set values to attributes.
-            this.attributes['index'] = index;
-            this.attributes['offsetInMilliseconds'] = 0;
-            this.attributes['playbackIndexChanged'] = true;
+                                // Reached at the end. Thus reset state to start mode and stop playing.
+                                this.handler.state = States.PODCAST;
+                                const message = this.t('PODCAST_END_PLAYLIST', (podcastData.length-1));
+                                this.response.speak(message).audioPlayerStop();
+                                return this.emit(':responseReady');
 
-            controller.play.call(this);*/
-        	
+                        }
+                        // Set values to attributes.
+                        this.attributes['index'] = index;
+                        this.attributes['offsetInMilliseconds'] = 0;
+                        this.attributes['playbackIndexChanged'] = true;
+
+                        controller.play.call(this);*/
+
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');        	
-        	
+            this.emit(':responseReady');
+
         },
         playPrevious: function () {
 
-/*
- * This code makes sense only if we can save UserID into DynamoDB. Of course we should get podcast index from DynamoDB
- * I leave it as a comment because maybe in the future they want to save userID and we can improve this feature very
- * fast and easily :)
- * 
- *          var index = this.attributes['LastBlogNumber'];
+            /*
+             * This code makes sense only if we can save UserID into DynamoDB. Of course we should get podcast index from DynamoDB
+             * I leave it as a comment because maybe in the future they want to save userID and we can improve this feature very
+             * fast and easily :)
+             *
+             *          var index = this.attributes['LastBlogNumber'];
 
-            index -= 1;
-            this.attributes['LastBlogNumber']=index;
-            // Check for last audio file.
-            if (index <= -1) {
-                    // Reached at the end. Thus reset state to start mode and stop playing.
-                    this.handler.state = StatesConst.PODCAST;
+                        index -= 1;
+                        this.attributes['LastBlogNumber']=index;
+                        // Check for last audio file.
+                        if (index <= -1) {
+                                // Reached at the end. Thus reset state to start mode and stop playing.
+                                this.handler.state = States.PODCAST;
 
-                    const message = this.t('PODCAST_BEGINN_PLAYLIST', (podcastData.length-1));
-                    this.response.speak(message).audioPlayerStop();
-                    return this.emit(':responseReady');
-                
-            }
-            // Set values to attributes.
-            this.attributes['index'] = index;
-            this.attributes['offsetInMilliseconds'] = 0;
-            this.attributes['playbackIndexChanged'] = true;
+                                const message = this.t('PODCAST_BEGINN_PLAYLIST', (podcastData.length-1));
+                                this.response.speak(message).audioPlayerStop();
+                                return this.emit(':responseReady');
 
-            controller.play.call(this);  */      	
-        	
+                        }
+                        // Set values to attributes.
+                        this.attributes['index'] = index;
+                        this.attributes['offsetInMilliseconds'] = 0;
+                        this.attributes['playbackIndexChanged'] = true;
+
+                        controller.play.call(this);  */
+
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');              	        	
-        	
+            this.emit(':responseReady');
+
         },
         loopOn: function () {
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');  
+            this.emit(':responseReady');
         },
         loopOff: function () {
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');  
+            this.emit(':responseReady');
         },
         shuffleOn: function () {
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');  
+            this.emit(':responseReady');
         },
         shuffleOff: function () {
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');  
+            this.emit(':responseReady');
         },
         startOver: function () {
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');  
+            this.emit(':responseReady');
         },
         reset: function () {
             // Right now this function is not implemented in our case.
             this.response.speak(this.t('NOT_IMPLEMENTED_FUNCTION')).audioPlayerStop();
-            this.emit(':responseReady');  
+            this.emit(':responseReady');
         }
     }
 }();

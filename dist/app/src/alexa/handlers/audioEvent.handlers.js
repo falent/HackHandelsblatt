@@ -1,36 +1,42 @@
-const Alexa = require('alexa-sdk');
-const StatesConst = require('./states.const');
+'use strict';
 
-var podcastData = require('../controllers/feed.controller');
+var Alexa = require('alexa-sdk');
+var audioData = require('./audioAssets');
+const States = require('./states.const');
 
-// Binding audio handlers to PODCAST State since they are expected only in this mode.
-module.exports = Alexa.CreateStateHandler(StatesConst.NONE, {
+// Binding audio handlers to PLAY_MODE State since they are expected only in this mode.
+var audioEventHandlers = Alexa.CreateStateHandler(States.PLAY_MODE, {
     'PlaybackStarted' : function () {
-        console.log('******* PlaybackStarted (State NONE) *******');
         /*
          * AudioPlayer.PlaybackStarted Directive received.
          * Confirming that requested audio file began playing.
          * Storing details in dynamoDB using attributes.
          */
-        return;
+        this.attributes['token'] = getToken.call(this);
+        this.attributes['index'] = getIndex.call(this);
+        this.attributes['playbackFinished'] = false;
+        this.emit(':saveState', true);
     },
     'PlaybackFinished' : function () {
-        console.log('******* PlaybackFinished (State NONE) *******');
         /*
          * AudioPlayer.PlaybackFinished Directive received.
          * Confirming that audio file completed playing.
          * Storing details in dynamoDB using attributes.
          */
-        return;
+        this.attributes['playbackFinished'] = true;
+        this.attributes['enqueuedToken'] = false;
+        this.emit(':saveState', true);
     },
     'PlaybackStopped' : function () {
-        console.log('******* PlaybackStopped (State NONE) *******');
         /*
          * AudioPlayer.PlaybackStopped Directive received.
          * Confirming that audio file stopped playing.
          * Storing details in dynamoDB using attributes.
          */
-        return;
+        this.attributes['token'] = getToken.call(this);
+        this.attributes['index'] = getIndex.call(this);
+        this.attributes['offsetInMilliseconds'] = getOffsetInMilliseconds.call(this);
+        this.emit(':saveState', true);
     },
     'PlaybackNearlyFinished' : function () {
         /*
@@ -39,15 +45,47 @@ module.exports = Alexa.CreateStateHandler(StatesConst.NONE, {
          * Storing details in dynamoDB using attributes.
          * Enqueuing the next audio file.
          */
-        return;
+        if (this.attributes['enqueuedToken']) {
+            /*
+             * Since AudioPlayer.PlaybackNearlyFinished Directive are prone to be delivered multiple times during the
+             * same audio being played.
+             * If an audio file is already enqueued, exit without enqueuing again.
+             */
+            return this.context.succeed({});
+        }
+
+        var enqueueIndex = this.attributes['index'];
+        enqueueIndex +=1;
+        // Checking if  there are any items to be enqueued.
+        if (enqueueIndex === audioData.length) {
+            if (this.attributes['loop']) {
+                // Enqueueing the first item since looping is enabled.
+                enqueueIndex = 0;
+            } else {
+                // Nothing to enqueue since reached end of the list and looping is disabled.
+                return this.context.succeed({});
+            }
+        }
+        // Setting attributes to indicate item is enqueued.
+        this.attributes['enqueuedToken'] = String(this.attributes['playOrder'][enqueueIndex]);
+
+        var enqueueToken = this.attributes['enqueuedToken'];
+        var playBehavior = 'ENQUEUE';
+        var podcast = audioData[this.attributes['playOrder'][enqueueIndex]];
+        var expectedPreviousToken = this.attributes['token'];
+        var offsetInMilliseconds = 0;
+
+        this.response.audioPlayerPlay(playBehavior, podcast.url, enqueueToken, expectedPreviousToken, offsetInMilliseconds);
+        this.emit(':responseReady');
     },
     'PlaybackFailed' : function () {
         //  AudioPlayer.PlaybackNearlyFinished Directive received. Logging the error.
         console.log("Playback Failed : %j", this.event.request.error);
-        this.context.succeed(true);
+        this.context.succeed({});
     }
 });
 
+module.exports = audioEventHandlers;
 
 function getToken() {
     // Extracting token received in the request.

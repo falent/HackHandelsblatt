@@ -1,62 +1,37 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "handelsblatt",
-      "intents": [
+      "invocationName": "handelsblatt demo",
+      "intents": [{
+        "name": "AMAZON.CancelIntent",
+        "slots": [],
+        "samples": []
+      },
         {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
+          "name": "ReadPodcastIntent",
+          "slots": [],
+          "samples": [
+            "spiele podcast"
+          ]
         },
         {
           "name": "AMAZON.HelpIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "NameIntent",
-          "slots": [
-            {
-              "name": "first_name",
-              "type": "AMAZON.DE_FIRST_NAME"
-            }
-          ],
-          "samples": [
-            "{first_name}",
-            "Mein Name ist {first_name}",
-            "Ich heisse {first_name}"
-          ]
-        },
-        {
-          "name": "NewsIntent",
-          "slots": [
-            {
-              "name": "news_category",
-              "type": "CUSTOM_NEWS"
-            }
-          ],
-          "samples": [
-            "Sag mir Nachrichten von {news_category}",
-            "über {news_category}"
-          ]
-        },
-        {
-          "name": "TemplateIntent",
           "slots": [],
-          "samples": [
-            "hier kannst du template nachricht geben welche alexa reacts"
-          ]
+          "samples": []
         },
         {
           "name": "PlayAudio",
           "slots": [],
           "samples": [
-            "begin podcast",
+            "starte podcast",
             "begin the podcast",
             "begin playing the podcast",
-            "start podcast",
+            "starte podcast",
             "start the podcast",
             "start playing the podcast",
             "play the podcast",
@@ -72,50 +47,41 @@
         },
         {
           "name": "AMAZON.PauseIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.ResumeIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.PreviousIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.StartOverIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.YesIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.NoIntent",
+          "slots": [],
           "samples": []
         },
         {
           "name": "AMAZON.NextIntent",
+          "slots": [],
           "samples": []
         }
       ],
-      "types": [
-        {
-          "name": "CUSTOM_NEWS",
-          "values": [
-            {
-              "name": {
-                "value": "bitcoin"
-              }
-            },
-            {
-              "name": {
-                "value": "christina"
-              }
-            }
-          ]
-        }
-      ]
+      "types": []
     }
   }
 }

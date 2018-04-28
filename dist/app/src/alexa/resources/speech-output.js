@@ -62,6 +62,12 @@ module.exports = {
         ],
         CANCEL_ANSWER: [
             "Sie haben den Skill abgebrochen"
+        ],
+        CHOOSE_PODCAST: [
+            "Hahahaha %s"
+        ],
+        PODCAST_CARD: [
+            "Hahahaha Podcast card %s!"
         ]
     }
   }

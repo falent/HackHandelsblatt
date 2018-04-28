@@ -5,25 +5,25 @@
         "en-US": {
           "summary": "Hackathon",
           "examplePhrases": [
-            "Alexa, open handelsblatt"
+            "Alexa, open handelsblatt demo test"
           ],
           "keywords": [
             "hello",
             "world"
           ],
-          "name": "handelsblatt",
+          "name": "handelsblatt demo",
           "description": "Hackathon Skill"
         },
         "de-DE": {
           "summary": "Hackathon",
           "examplePhrases": [
-            "Alexa, starte handelsblatt"
+            "Alexa, starte handelsblatt demo"
           ],
           "keywords": [
             "hello",
             "world"
           ],
-          "name": "handelsblatt",
+          "name": "handelsblatt demo",
           "description": "Hackathon Skill"
         }
       },
@@ -35,7 +35,7 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "https://celero.localtunnel.me",
+          "uri": "https://dfb428e8.ngrok.io",
           "sslCertificateType": "Wildcard"
         },
         "interfaces": [{
