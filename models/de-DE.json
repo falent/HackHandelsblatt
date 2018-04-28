@@ -1,15 +1,9 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "handelsblatt demo",
+      "invocationName": "blog nachrichten",
       "intents": [
-        {
-          "name": "ReadPodcastIntent",
-          "slots": [],
-          "samples": [
-            "spiele podcasts ab"
-          ]
-        },
+
         {
           "name": "AMAZON.CancelIntent",
           "samples": []
@@ -84,7 +78,9 @@
           "name": "PlayAudio",
           "slots": [],
           "samples": [
-            "begin podcast",
+            "podcast",
+            "spiele ab",
+            "spiele",
             "begin the podcast",
             "begin playing the podcast",
             "start podcast",

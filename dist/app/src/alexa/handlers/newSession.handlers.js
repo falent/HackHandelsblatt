@@ -21,7 +21,7 @@ const duringAudioAllowedIntents = [
 
 module.exports = {
   NewSession: function() {
-    
+
       console.log("Oto nowa sesja");
       console.log(this.event.session.sessionId);
       // Intent Request:
@@ -53,19 +53,21 @@ module.exports = {
   LaunchIntent: function() {
     //We are checking a name of our user
 
-    var reprompt = "Welche Nachrichten möchtest du hören?";
-    var speechOutput = "Welche Nachrichten möchtest du hören?";
+      this.response
+          .speak(speechOutputUtils.pickRandom(this.t("WELCOMEHI"))+" "+this.t("WELCOME"))
+          .listen(this.t("REPEAT_WELCOME"));
+      this.emit(":responseReady");
 
-    this.emit(":ask", speechOutput, reprompt);
+
   },
 
   // Custom Intents:
 
-  NameIntent: function() {
-    console.log("[NewSessionHandlers] Template");
-    this.handler.state = States.NEWS;
-    this.emitWithState("NameIntent");
-  },
+    'PlayAudio': function() {
+        this.handler.state = States.PODCAST;
+        console.log("Read podcasts!");
+        this.emitWithState('ReadPodcastIntent');
+    },
 
   NewsIntent: function() {
     console.log("[NewsIntent] Template");
@@ -73,10 +75,7 @@ module.exports = {
     this.emitWithState("NewsIntent");
   },
 
-  PlayMusic: function() {
-    this.handler.state = States.MUSIC;
-    this.emitWithState("PlayMusic");
-  },
+
   // Unhandled Intent:
   // Built-In Intents:
 
@@ -107,11 +106,6 @@ module.exports = {
   "AMAZON.CancelIntent": function() {
     this.response.speak(speechOutputUtils.pickRandom(this.t("CANCEL_ANSWER")));
     this.emit(":responseReady");
-  },
-
-  'ReadPodcastIntent': function() {
-  this.handler.state = States.PODCAST;
-  console.log("Read podcasts!");
-  this.emitWithState('ReadPodcastIntent');
   }
+
 };

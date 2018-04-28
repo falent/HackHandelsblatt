@@ -6,14 +6,14 @@
           "summary": "Hackathon",
           "examplePhrases": ["Alexa, open blognews"],
           "keywords": ["hello", "world"],
-          "name": "blognews",
+          "name": "blog nachrichten",
           "description": "Hackathon Skill"
         },
         "de-DE": {
           "summary": "Hackathon",
           "examplePhrases": ["Alexa, starte blognews"],
           "keywords": ["hello", "world"],
-          "name": "blognews",
+          "name": "blog nachrichten",
           "description": "Hackathon Skill"
         }
       },

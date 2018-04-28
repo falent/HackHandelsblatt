@@ -1,7 +1,7 @@
 {
   "interactionModel": {
     "languageModel": {
-      "invocationName": "handelsblatt",
+      "invocationName": "blog nachrichten",
       "intents": [
         {
           "name": "AMAZON.CancelIntent",

@@ -1,6 +1,6 @@
 require("dotenv").config();
 const NewsAPI = require("newsapi");
-const newsapi = new NewsAPI(process.env.NEWS_API_KEY);
+const newsapi = new NewsAPI("c866993f343e4bb096d52115b8662314");
 const _ = require("lodash");
 const moment = require("moment");
 

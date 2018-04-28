@@ -22,8 +22,10 @@ module.exports = Alexa.CreateStateHandler(States.PODCAST, {
     //  Change state to START_MODE
     this.handler.state = States.PODCAST;
 
-    var message = 'Willkomen in Handelsblatt Podcast sage starte podcast.';
-    var reprompt = 'Sage ';
+
+
+    var message = 'Jetzt habe ich nur Podcast von Handelsblat sag einfach spiele';
+    var reprompt = 'Sag spiele ';
 
     this.response.speak(message).listen(reprompt);
     this.emit(':responseReady');
