@@ -48,6 +48,25 @@
           ]
         },
         {
+          "name": "NewsDetailsIntent",
+          "samples": [
+            "{topicValue}",
+            "Zu {topicValue}",
+            "Nummer {topicValue}",
+            "Zu Nummer {topicValue}",
+            "Mehr zu {topicValue}",
+            "Mehr zu Punkt {topicValue}",
+            "Mehr über {topicValue}",
+            "Mehr über Nummber {topicValue}"
+          ],
+          "slots": [
+            {
+              "name": "topicValue",
+              "type": "AMAZON.NUMBER"
+            }
+          ]
+        },
+        {
           "name": "TemplateIntent",
           "slots": [],
           "samples": [

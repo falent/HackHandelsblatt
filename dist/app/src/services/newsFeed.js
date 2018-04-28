@@ -28,9 +28,12 @@ exports.getNewsOfLast24h = topic => {
     })
     .then(response => {
       const articles = response.articles;
-      const results = articles
-        .map(a => ({ title: a.title, source: a.source.name }))
-        .map(content => `The ${content.source} reports: ${content.title}.`);
+      const results = articles.map(a => ({
+        title: a.title,
+        source: a.source.name,
+        description:
+          a.description || "Leider sind hier keine Details vorhanden."
+      }));
       console.log(JSON.stringify(results));
       return results;
     });
