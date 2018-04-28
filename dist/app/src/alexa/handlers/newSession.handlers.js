@@ -109,4 +109,11 @@ module.exports = {
       .listen(this.t("REPEAT"));
     this.emit(":responseReady");
   }
+  ,
+
+  'ReadPodcastIntent': function() {
+  this.handler.state = States.PODCAST;
+  console.log("Read podcasts!");
+  this.emitWithState('ReadPodcastIntent');
+}
 };

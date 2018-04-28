@@ -4,6 +4,13 @@
       "invocationName": "handelsblatt",
       "intents": [
         {
+          "name": "ReadPodcastIntent",
+          "slots": [],
+          "samples": [
+            "spiele podcasts ab"
+          ]
+        },
+        {
           "name": "AMAZON.CancelIntent",
           "samples": []
         },

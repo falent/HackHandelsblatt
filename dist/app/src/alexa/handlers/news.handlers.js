@@ -127,5 +127,14 @@ module.exports = Alexa.CreateStateHandler(States.NEWS, {
   "AMAZON.CancelIntent": function() {
     this.handler.state = States.NONE;
     this.emit("AMAZON.CancelIntent");
+  },
+
+
+  'ReadPodcastIntent': function() {
+    this.handler.state = States.PODCAST;
+    console.log("Read podcasts!");
+    this.emitWithState('ReadPodcastIntent');
+
   }
-});
+
+  });

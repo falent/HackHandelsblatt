@@ -8,12 +8,15 @@ const SpeechOutput = require('./alexa/resources/speech-output');
 const newSessionHandlers = require('./alexa/handlers/newSession.handlers');
 const nameHandlers = require('./alexa/handlers/name.handlers');
 const newsHandlers = require('./alexa/handlers/news.handlers');
+const startModeIntentHandlers = require('./alexa/handlers/startModeIntent.handlers');
+var audioEventHandlers = require('./alexa/handlers/audioEventHandlers');
 
 var allHandlers = [
     newSessionHandlers,
     nameHandlers,
-    newsHandlers
-
+    newsHandlers,
+    audioEventHandlers,
+    startModeIntentHandlers
 ];
 
 
