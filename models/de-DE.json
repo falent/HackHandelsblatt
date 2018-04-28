@@ -39,7 +39,7 @@
           ],
           "samples": [
             "Sag mir Nachrichten von {news_category}",
-            "Nachrichten"
+            "über {news_category}"
           ]
         },
         {

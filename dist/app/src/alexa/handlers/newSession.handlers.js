@@ -68,12 +68,12 @@ module.exports = {
         //We are checking a name of our user
 
 
-       var reprompt = 'Kannst du mir bitte ihre Name sagen?';
-       var speechOutput = "Hi, Das ist kein Test!, WChristina ist Ihrj Name? Hujs Dupppa"
+       var reprompt = 'Welche Nachrichten möchtest du hören?';
+       var speechOutput = "Welche Nachrichten möchtest du hören?"
 
 
 
-       this.handler.state = States.NAME;
+
        this.emit(':ask',speechOutput, reprompt);
 
 
@@ -89,6 +89,12 @@ module.exports = {
         console.log('[NewSessionHandlers] Template');
         this.handler.state = States.NAME;
         this.emitWithState('NameIntent');
+    },
+
+    'NewsIntent': function() {
+        console.log('[NewsIntent] Template');
+        this.handler.state = States.NEWS;
+        this.emitWithState('NewsIntent');
     },
 
     'PlayMusic': function() {
