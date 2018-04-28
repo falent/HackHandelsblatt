@@ -3,50 +3,50 @@ module.exports = {
   "en-US": {
       translation: {
           WELCOME: [
-              "Hi Train Buddy!",
-              "Welcome to My Gym!"
+              "Wellcome  to BlogNachrichten! Tell  <break time='0.5s'/> podcast or <break time='0.5s'/> news from Merkel"
           ],
-          REPEAT: [
-              "Could you please repeat?"
+          WELCOMEHI: [
+              "Hi!", "Hallo!", "Greetings!", "Hopsa Hi!"
           ],
-          DEPARTAMENT: [
-              "you are looking for a departament %s"
+          REPEAT_WELCOME: [
+              "Tell  <break time='0.5s'/> podcast or <break time='0.5s'/> news from Merkel "
           ],
           UNDEFINED: [
-              "I havent understood you!"
-          ],
-          HELP: [
-              "It is an easy alexa demo skill, which helps you to keep fit! "
+              "Not understood"
           ],
           HELP_DEPARTAMENT: [
-              "This is an example that help intent can be in an other state"
+              "Ordnung muss sein"
+          ],
+          HELP: [
+              "You can get podcast and news from all over world"
           ],
           STOP_ANSWER: [
-              "You decided to close my skill, why? Ok, have a nice day!"
+              "Oh stop? Why?"
           ],
           CANCEL_ANSWER: [
-              "It is a pitty you canceled it"
+              "Oh stop? Why?"
           ],
-          NEW_USER_WELLCOME: [
-              "Please give me your name, It happens only one time!"
+          HELP_PODCAST:[
+              "You can say next or previous"
           ],
-          WELCOME_OLD_USER: [
-              "Hi %s, nice to hear you. What would you like to do?"
+          PODCAST:[
+              "Hello right now we have only podcast from handelsblatt"
           ]
 
 
       }
   },
-  "de-DE": {
+
+    "de-DE": {
     translation: {
         WELCOME: [
-            "Hi, Was wollen Sie?", "Hallo, sagen Sie mir was Sie wollen"
+            "Willkomen bei BlogNachrichten! Sag einfach zum beispiel <break time='0.5s'/> podcast oder <break time='0.5s'/> nachrichten von Merkel"
         ],
-        REPEAT: [
-            "Sagen Sie es noch mal"
+        WELCOMEHI: [
+            "Moin moin!", "Hallo!", "Hallöchen!", "Hei!"
         ],
-        DEPARTAMENT: [
-            "Ihr Departament befindet sich %s"
+        REPEAT_WELCOME: [
+            "Sag einfach zum beispiel <break time='0.5s'/> podcast oder <break time='0.5s'/> nachrichten von Merkel "
         ],
         UNDEFINED: [
             "Nicht verstanden"
@@ -55,14 +55,21 @@ module.exports = {
             "Ordnung muss sein"
         ],
         HELP: [
-            "Sie können fragen, welche Temperature in Tomas Zimmer gibt"
+            "Das ist eine Skill wo du Nachrichten und Podcast von aller Welt erhählst. Sag einfach zum Beispiel Podcast oder Nachrichten über Merkel"
         ],
         STOP_ANSWER: [
             "Ich habe den Skill gestoppt"
         ],
         CANCEL_ANSWER: [
             "Sie haben den Skill abgebrochen"
+        ],
+        HELP_PODCAST:[
+            "Du kannst sagen nächste oder vorherige"
+        ],
+        PODCAST:[
+            "Jetzt habe ich nur Podcast von Handelsblatt"
         ]
+
     }
   }
 }

@@ -23,11 +23,14 @@ module.exports = Alexa.CreateStateHandler(States.PODCAST, {
     this.handler.state = States.PODCAST;
 
 
+  .speak(speechOutputUtils.pickRandom(this.t("PODCAST"))
+          .listen(this.t("PODCAST"));
 
     var message = 'Jetzt habe ich nur Podcast von Handelsblat sag einfach spiele';
     var reprompt = 'Sag spiele ';
 
-    this.response.speak(message).listen(reprompt);
+
+    this.response.speak(speechOutputUtils.pickRandom(this.t("PODCAST"))).listen(speechOutputUtils.pickRandom(this.t("PODCAST")));
     this.emit(':responseReady');
   },
   'PlayAudio' : function () {
@@ -80,7 +83,20 @@ module.exports = Alexa.CreateStateHandler(States.PODCAST, {
     var message = 'Sorry, I could not understand. Please say, play the audio, to begin the audio.';
     this.response.speak(message).listen(message);
     this.emit(':responseReady');
-  }
+  },
+
+    "AMAZON.HelpIntent": function() {
+    this.response.speak(
+        speechOutputUtils.pickRandom(this.t("HELP_PODCAST")).listen(this.t("HELP_PODCAST"))
+    );
+    this.emit(":responseReady");
+},
+
+    NewsIntent: function() {
+    console.log("[NewsIntent] Template");
+    this.handler.state = States.NEWS;
+    this.emitWithState("NewsIntent");
+}
 
 });
 
@@ -185,34 +201,118 @@ var controller = function () {
 
     },
     playPrevious: function () {
-      /*
-       *  Called when AMAZON.PreviousIntent or PlaybackController.PreviousCommandIssued is invoked.
-       *  Index is computed using token stored when AudioPlayer.PlaybackStopped command is received.
-       *  If reached at the end of the playlist, choose behavior based on "loop" flag.
-       */
-      var index = this.attributes['index'];
-      index -= 1;
-      // Check for last audio file.
-      if (index === -1) {
-        if (this.attributes['loop']) {
-          index = audioData.length - 1;
-        } else {
-          // Reached at the end. Thus reset state to start mode and stop playing.
-          this.handler.state = States.PODCAST;
+        /*
+         *  Called when AMAZON.PreviousIntent or PlaybackController.PreviousCommandIssued is invoked.
+         *  Index is computed using token stored when AudioPlayer.PlaybackStopped command is received.
+         *  If reached at the end of the playlist, choose behavior based on "loop" flag.
 
-          var message = 'You have reached at the start of the playlist.';
-          this.response.speak(message).audioPlayerStop();
-          return this.emit(':responseReady');
+
+
+
+
+
+
+
+
+
+
+
+          if (!this.attributes['playOrder']) {
+              // Initialize Attributes if undefined.
+              this.attributes['playOrder'] = Array.apply(null, {length: audioData.length}).map(Number.call, Number);
+              this.attributes['index'] = 0;
+              this.attributes['offsetInMilliseconds'] = 0;
+              this.attributes['loop'] = false; //do not loop on the list of podcast
+              this.attributes['shuffle'] = false;
+              this.attributes['playbackIndexChanged'] = true;
+              //  Change state to START_MODE
+              this.handler.state = States.PODCAST;
+          }
+
+
+        var index = this.attributes['index'];
+        index -= 1;
+        // Check for last audio file.
+        if (index === -1) {
+          if (this.attributes['loop']) {
+            index = audioData.length - 1;
+          } else {
+            // Reached at the end. Thus reset state to start mode and stop playing.
+            this.handler.state = States.PODCAST;
+
+            var message = 'You have reached at the start of the playlist.';
+            this.response.speak(message).audioPlayerStop();
+            return this.emit(':responseReady');
+          }
         }
-      }
-      // Set values to attributes.
-      this.attributes['index'] = index;
-      this.attributes['offsetInMilliseconds'] = 0;
-      this.attributes['playbackIndexChanged'] = true;
+        // Set values to attributes.
+        this.attributes['index'] = index;
+        this.attributes['offsetInMilliseconds'] = 0;
+        this.attributes['playbackIndexChanged'] = true;
 
-      controller.play.call(this);
+        controller.play.call(this);
+      },
+
+             */
+
+
+        if (!this.attributes['playOrder']) {
+            // Initialize Attributes if undefined.
+            this.attributes['playOrder'] = Array.apply(null, {length: audioData.length}).map(Number.call, Number);
+            this.attributes['index'] = 0;
+            this.attributes['offsetInMilliseconds'] = 0;
+            this.attributes['loop'] = false; //do not loop on the list of podcast
+            this.attributes['shuffle'] = false;
+            this.attributes['playbackIndexChanged'] = true;
+            //  Change state to START_MODE
+            this.handler.state = States.PODCAST;
+        }
+
+        var self = this;
+        fs = require('fs')
+        fs.readFile(__dirname + "/tom.txt", 'utf8', function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            var index = parseInt(data || "0", 10);
+
+
+            index -= 1;
+
+            fs.writeFileSync(__dirname + "/tom.txt", index);
+
+
+            // Check for last audio file.
+            if (index === -1) {
+                if (this.attributes['loop']) {
+                    index = audioData.length - 1;
+                } else {
+                    // Reached at the end. Thus reset state to start mode and stop playing.
+                    this.handler.state = States.PODCAST;
+
+                    var message = 'Du hast schon alles abgespiellt! Habe ich nichts neues!';
+                    this.response.speak(message).audioPlayerStop();
+                    return this.emit(':responseReady');
+                }
+            }
+            // Check for last audio file.
+
+            // Set values to attributes.
+            self.handler.state = States.PODCAST;
+
+            self.attributes['index'] = index;
+            self.attributes['offsetInMilliseconds'] = 0;
+            self.attributes['playbackIndexChanged'] = true;
+
+            controller.play.call(self);
+
+
+        });
+
     },
-    loopOn: function () {
+
+
+        loopOn: function () {
       // Turn on loop play.
       this.attributes['loop'] = true;
       var message = 'Loop turned on.';
