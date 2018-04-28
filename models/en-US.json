@@ -23,21 +23,17 @@
               "type": "AMAZON.US_FIRST_NAME"
             }
           ],
-          "samples": [
-            "{first_name}"
-          ]
+          "samples": ["{first_name}"]
         },
         {
           "name": "NewsIntent",
           "slots": [
             {
-              "name": "news_category",
-              "type": "CUSTOM_NEWS"
+              "name": "news_topic",
+              "type": "AMAZON.SearchQuery"
             }
           ],
-          "samples": [
-            "Tell me about {news_category}"
-          ]
+          "samples": ["Tell me about {news_topic}"]
         },
         {
           "name": "TemplateIntent",

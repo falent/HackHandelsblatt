@@ -1,23 +1,23 @@
 {
   "name": "Alexa-template-for-Heroku",
   "version": "0.0.1",
-  "description": "Quickstart template for a NodeJS Application, you can easily deploy it in heroku",
+  "description":
+    "Quickstart template for a NodeJS Application, you can easily deploy it in heroku",
   "engines": {
     "node": "6.9.4"
   },
   "main": "dist/app/index.js",
   "scripts": {
-    "start": "node dist/app/index.js",
-    "heroku-deploy": "git checkout atomic-development && git add ./ && git commit -m \"development increment\" && git push heroku atomic-development:master --force && heroku logs --tail",
+    "start": "nodemon --exec node dist/app/index.js",
+    "heroku-deploy":
+      "git checkout atomic-development && git add ./ && git commit -m \"development increment\" && git push heroku atomic-development:master --force && heroku logs --tail",
     "serve": "node dist/app/index.js"
   },
   "repository": {
     "type": "git",
     "url": "t"
   },
-  "keywords": [
-    "nodejs"
-  ],
+  "keywords": ["nodejs"],
   "author": "Tomasz Krajewski",
   "contributors": [
     {
@@ -32,14 +32,16 @@
   "dependencies": {
     "alexa-sdk": "^1.0.10",
     "aws-lambda-mock-context": "^3.1.1",
+    "aws-sdk": "2.224.1",
     "body-parser": "^1.17.2",
     "botkit": "^0.5.4",
-    "request": "^2.81.0",
+    "dotenv": "^5.0.1",
     "express": "4.16.3",
-    "aws-sdk": "2.224.1",
-    "nodemon": "^1.17.3",
-    "mongoose":  "^5.0.16",
+    "lodash": "^4.17.10",
+    "moment": "^2.22.1",
+    "mongoose": "^5.0.16",
     "newsapi": "^2.2.2",
-    "dotenv": "^5.0.1"
+    "nodemon": "^1.17.3",
+    "request": "^2.81.0"
   }
 }

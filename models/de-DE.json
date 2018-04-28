@@ -33,13 +33,17 @@
           "name": "NewsIntent",
           "slots": [
             {
-              "name": "news_category",
-              "type": "CUSTOM_NEWS"
+              "name": "news_topic",
+              "type": "AMAZON.SearchQuery"
             }
           ],
           "samples": [
-            "Sag mir Nachrichten von {news_category}",
-            "über {news_category}"
+            "Nachrichten von {news_topic}",
+            "Nachrichten über {news_topic}",
+            "Neues über {news_topic}",
+            "Neues von {news_topic}",
+            "Sag mir Nachrichten von {news_topic}",
+            "über {news_topic}"
           ]
         },
         {

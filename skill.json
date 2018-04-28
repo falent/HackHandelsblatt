@@ -4,25 +4,15 @@
       "locales": {
         "en-US": {
           "summary": "Hackathon",
-          "examplePhrases": [
-            "Alexa, open handelsblatt"
-          ],
-          "keywords": [
-            "hello",
-            "world"
-          ],
+          "examplePhrases": ["Alexa, open handelsblatt"],
+          "keywords": ["hello", "world"],
           "name": "handelsblatt",
           "description": "Hackathon Skill"
         },
         "de-DE": {
           "summary": "Hackathon",
-          "examplePhrases": [
-            "Alexa, starte handelsblatt"
-          ],
-          "keywords": [
-            "hello",
-            "world"
-          ],
+          "examplePhrases": ["Alexa, starte handelsblatt"],
+          "keywords": ["hello", "world"],
           "name": "handelsblatt",
           "description": "Hackathon Skill"
         }
@@ -35,12 +25,14 @@
     "apis": {
       "custom": {
         "endpoint": {
-          "uri": "https://celero.localtunnel.me",
+          "uri": "https://374c4676.ngrok.io",
           "sslCertificateType": "Wildcard"
         },
-        "interfaces": [{
-          "type": "AUDIO_PLAYER"
-        }]
+        "interfaces": [
+          {
+            "type": "AUDIO_PLAYER"
+          }
+        ]
       }
     },
     "manifestVersion": "1.0",
